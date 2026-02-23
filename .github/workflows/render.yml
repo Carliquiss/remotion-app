@@ -13,9 +13,9 @@ jobs:
         with:
           node-version: 20
           
-      - run: npm ci
+      - run: npm ci --legacy-peer-deps
       
-      - run: npx remotion render TravelItems video.mp4
+      - run: npx remotion render TravelMap video.mp4
       
       - uses: actions/upload-artifact@v4
         with:
