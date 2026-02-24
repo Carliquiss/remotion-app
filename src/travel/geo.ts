@@ -4,7 +4,7 @@ import type { LonLat } from "./types";
 // Assumptions: The viewport frames Spain and the Canary Islands perfectly.
 // Using a LineString to define the bounding box avoids spherical winding order issues in d3,
 // which previously caused the polygon to represent the "rest of the globe".
-const REGION_BOUNDS: GeoJSON.LineString = {
+export const REGION_BOUNDS_SPAIN_CANARIES: GeoJSON.LineString = {
     type: "LineString",
     coordinates: [
         [-20, 26], // Bottom Left (South-West of Canaries)
@@ -12,9 +12,17 @@ const REGION_BOUNDS: GeoJSON.LineString = {
     ],
 };
 
+export const REGION_BOUNDS_ANDALUCIA: GeoJSON.LineString = {
+    type: "LineString",
+    coordinates: [
+        [-5.5, 36.0], // Bottom Left (Cadiz / Malaga coast)
+        [-2.5, 38.0], // Top Right (North of Granada / Jaen)
+    ],
+};
+
 // Generates a map projection mathematically fitted to our required region & video dimension
-export const createProjection = (width: number, height: number) => {
-    return geoMercator().fitSize([width, height], REGION_BOUNDS);
+export const createProjection = (width: number, height: number, bounds: GeoJSON.LineString = REGION_BOUNDS_SPAIN_CANARIES) => {
+    return geoMercator().fitSize([width, height], bounds);
 };
 
 export const createPathGenerator = (projection: GeoProjection) => {

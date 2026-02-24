@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { AbsoluteFill, staticFile, useDelayRender, useVideoConfig } from "remotion";
 import { feature } from "topojson-client";
 import type { FeatureCollection } from "geojson";
-import { createProjection, createPathGenerator } from "./geo";
+import { createPathGenerator } from "./geo";
 
-export const MapLayer: React.FC = () => {
+import { GeoProjection } from "d3-geo";
+
+export const MapLayer: React.FC<{ projection: GeoProjection }> = ({ projection }) => {
     const { width, height } = useVideoConfig();
     const { delayRender, continueRender } = useDelayRender();
     const [handle] = useState(() => delayRender("Loading map topology"));
@@ -26,18 +28,17 @@ export const MapLayer: React.FC = () => {
             });
     }, [handle, continueRender]);
 
-    const projection = createProjection(width, height);
     const pathGen = createPathGenerator(projection);
 
     return (
-        <AbsoluteFill style={{ backgroundColor: "#0b1220" }}> {/* Ocean Dark Blue */}
+        <AbsoluteFill style={{ backgroundColor: "#e0f2fe" }}> {/* Ocean Light Blue */}
             <svg width={width} height={height}>
                 {geoData?.features.map((f, i) => (
                     <path
                         key={i}
                         d={pathGen(f) ?? ""}
-                        fill="#111c33" // Land Dark Color
-                        stroke="#243a6b"
+                        fill="#ffffff" // Land White
+                        stroke="#cbd5e1" // Light border
                         strokeWidth={1}
                     />
                 ))}
