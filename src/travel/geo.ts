@@ -2,16 +2,14 @@ import { geoMercator, geoPath, geoInterpolate, GeoProjection } from "d3-geo";
 import type { LonLat } from "./types";
 
 // Assumptions: The viewport frames Spain and the Canary Islands perfectly.
-// Bounding box: [Min_Lon, Min_Lat], [Max_Lon, Max_Lat]
-const REGION_BOUNDS: GeoJSON.Polygon = {
-    type: "Polygon",
-    coordinates: [[
+// Using a LineString to define the bounding box avoids spherical winding order issues in d3,
+// which previously caused the polygon to represent the "rest of the globe".
+const REGION_BOUNDS: GeoJSON.LineString = {
+    type: "LineString",
+    coordinates: [
         [-20, 26], // Bottom Left (South-West of Canaries)
-        [5, 26],   // Bottom Right
         [5, 45],   // Top Right (North of Spain)
-        [-20, 45], // Top Left
-        [-20, 26],
-    ]],
+    ],
 };
 
 // Generates a map projection mathematically fitted to our required region & video dimension
